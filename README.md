@@ -74,6 +74,20 @@ Replaces the default v8 `formater`. The new `formater` takes a two arguments
 When the `formater` is done, it should `return` a `string`. The `string` will
 what `Error.stack` returns.
 
+```JavaScript
+chain.format.replace(function (error, frames) {
+  var lines = [];
+
+  lines.push(error.toString());
+
+  for (var i = 0; i < frames.length; i++) {
+    lines.push("    at " + frames[i].toString());
+  }
+
+  return lines.join("\n");
+});
+```
+
 ### chain.format.restore()
 
 Will restore the default v8 `formater`. Note that dude to the nature of v8
