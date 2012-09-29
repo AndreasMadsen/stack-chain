@@ -1,0 +1,30 @@
+{
+  "name": "stack-chain",
+  "description": "API for combining call site modifiers",
+  "version": "0.2.0",
+  "author": "Andreas Madsen <amwebdk@gmail.com>",
+  "main": "./stack-chain.js",
+  "scripts": {
+    "test": "tap ./test/simple"
+  },
+  "repository" : {
+    "type": "git",
+    "url": "git://github.com/AndreasMadsen/stack-chain.git"
+  },
+  "keywords": [
+    "stack",
+    "chain",
+    "trace",
+    "call site",
+    "concat",
+    "format"
+  ],
+  "devDependencies": {
+    "tap": "0.3.x"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "0.8",
+    "npm": "1"
+  }
+}
