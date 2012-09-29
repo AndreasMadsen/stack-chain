@@ -47,7 +47,7 @@ chain.extend.attach(function (error, frames) {
 ```
 
 ### chain.extend.deattach(modifier)
-### chain.filter.attach(modifier)
+### chain.filter.deattach(modifier)
 
 Removes a `modifier` function from the list of `modifiers`.
 
