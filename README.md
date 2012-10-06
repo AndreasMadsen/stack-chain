@@ -35,7 +35,7 @@ The `modifier` is a function there takes two arguments `error` and `frames`.
 When the `modifier` is done, it should `return` a modified `frames` array.
 
 ```JavaScript
-chain.extend.attach(function (error, frames) {
+chain.filter.attach(function (error, frames) {
 
     // Filter out traces related to this file
     var rewrite = frames.filter(function (callSite) {
