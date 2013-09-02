@@ -20,11 +20,11 @@
     "format"
   ],
   "devDependencies": {
-    "tap": "0.3.x"
+    "tap": "0.4.x"
   },
   "license": "MIT",
   "engines": {
-    "node": "0.8",
+    "node": "0.10 || 0.11",
     "npm": "1"
   }
 }
