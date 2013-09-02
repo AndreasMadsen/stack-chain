@@ -27,15 +27,7 @@
 
 module.exports = function FormatStackTrace(error, frames) {
   var lines = [];
-  try {
-    lines.push(error.toString());
-  } catch (e) {
-    try {
-      lines.push("<error: " + e + ">");
-    } catch (ee) {
-      lines.push("<error>");
-    }
-  }
+  lines.push(error.toString());
   for (var i = 0; i < frames.length; i++) {
     var frame = frames[i];
     var line;
