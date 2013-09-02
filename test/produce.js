@@ -25,7 +25,7 @@ exports.real = function produceError(level) {
   return stack || 'Error: trace';
 };
 
-exports.fake = function (input) {
+exports.fake = function(input) {
   var output = [];
 
   for (var i = 0, l = input.length; i < l; i++) {

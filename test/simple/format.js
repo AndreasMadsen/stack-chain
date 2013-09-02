@@ -23,7 +23,7 @@ test("stack format part", function (t) {
   t.test("no formatter set", function (t) {
     t.equal(produce.real(3), produce.fake([
       'Error: trace',
-      '    at exports.real ({where}:18:17)',
+      '    at {where}:18:17',
       '    at deepStack ({where}:5:5)',
       '    at deepStack ({where}:7:5)'
     ]));
@@ -36,7 +36,7 @@ test("stack format part", function (t) {
 
     t.equal(produce.real(3), produce.fake([
       'Error: trace',
-      'exports.real',
+      '',
       'deepStack',
       'deepStack'
     ]));
@@ -45,14 +45,14 @@ test("stack format part", function (t) {
 
     t.end();
   });
-  
+
   t.test("restore default formater", function (t) {
     chain.format.replace(format);
     chain.format.restore();
 
     t.equal(produce.real(3), produce.fake([
       'Error: trace',
-      '    at exports.real ({where}:18:17)',
+      '    at {where}:18:17',
       '    at deepStack ({where}:5:5)',
       '    at deepStack ({where}:7:5)'
     ]));

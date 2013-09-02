@@ -17,7 +17,7 @@ test("stack extend part", function (t) {
   t.test("no extend modifier attached", function (t) {
     t.equal(produce.real(3), produce.fake([
       'Error: trace',
-      '    at exports.real ({where}:18:17)',
+      '    at {where}:18:17',
       '    at deepStack ({where}:5:5)',
       '    at deepStack ({where}:7:5)'
     ]));
@@ -32,7 +32,7 @@ test("stack extend part", function (t) {
 
     t.equal(produce.real(3), produce.fake([
       'Error: trace',
-      '    at exports.real ({where}:18:17)',
+      '    at {where}:18:17',
       '    at wonder land',
       '    at deepStack ({where}:5:5)'
     ]));
@@ -50,7 +50,7 @@ test("stack extend part", function (t) {
 
     t.equal(produce.real(3), produce.fake([
       'Error: trace',
-      '    at exports.real ({where}:18:17)',
+      '    at {where}:18:17',
       '    at deepStack ({where}:5:5)',
       '    at deepStack ({where}:7:5)'
     ]));
@@ -69,7 +69,7 @@ test("stack extend part", function (t) {
 
     t.equal(produce.real(3), produce.fake([
       'Error: trace',
-      '    at exports.real ({where}:18:17)',
+      '    at {where}:18:17',
       '    at outer space',
       '    at wonder land'
     ]));
