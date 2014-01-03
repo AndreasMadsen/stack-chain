@@ -1,7 +1,3 @@
-/**
- * Copyright (c) 2012 Andreas Madsen
- * MIT License
- */
 
 // use a already existing formater or fallback to the default v8 formater
 var defaultFormater = Error.prepareStackTrace || require('./format.js');
@@ -11,9 +7,30 @@ function stackChain() {
   this.extend = new TraceModifier();
   this.filter = new TraceModifier();
   this.format = new StackFormater();
+  this.version = require('./package.json').version;
 }
 
-var chain = module.exports = new stackChain();
+var chain = new stackChain();
+
+// If a another copy (same version or not) of stack-chain exists it will result
+// in wrong stack traces (most likely dublicate callSites).
+if (global._stackChain) {
+  // In case the version match, we can simply return the first initialized copy
+  if (global._stackChain.version === chain.version) {
+    console.error('Another copy of stack-chain was found, using the first initialized copy');
+    module.exports = global._stackChain;
+
+    return; // Prevents V8 and Error extentions from being set again
+  }
+  // The version don't match, this is really bad. Lets just throw
+  else {
+    throw new Error('Conflicting version of stack-chain found');
+  }
+}
+// Yay, no other stack-chain copy exists, yet :/
+else {
+  module.exports = global._stackChain = chain;
+}
 
 function TraceModifier() {
   this._modifiers = [];
@@ -79,7 +96,7 @@ Object.defineProperty(Error.prototype, 'callSite', {
     }
 
     // calculate call site object
-    var stack = this.stack;
+    this.stack;
 
     // return call site object
     return this._callSite;
