@@ -94,9 +94,21 @@ Will restore the default v8 `formater`. Note that dude to the nature of v8
 `Error` objects, if one of the getters `Error.stack` or `Error.callSite` has
 already executed, the value of `Error.stack` won't change.
 
-### Error.callSite
+### Error.stackTraceLimit
+
+This limites the size of the `callSites` array. The default value is 10, and
+can be set to any positive number including `Infinity`. See
+[v8 documentation](http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi)
+for details.
+
+### Error().callSite.original
 
 Returns the original `callSite` array.
+
+### Error().callSite.mutated
+
+Returns the mutated `callSite` array, that is after `extend` and `filter`
+is applied. The array will also mot excite the `Error.stackTraceLimit`.
 
 ## License
 

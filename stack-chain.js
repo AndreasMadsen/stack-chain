@@ -1,6 +1,6 @@
 
 // use a already existing formater or fallback to the default v8 formater
-var defaultFormater = Error.prepareStackTrace || require('./format.js');
+var defaultFormater = require('./format.js');
 
 // public define API
 function stackChain() {
@@ -69,10 +69,21 @@ StackFormater.prototype.restore  = function () {
   this._formater = defaultFormater;
 };
 
-// Replace the v8 stack trace creator
-Error.prepareStackTrace = function (error, frames) {
-  // Store v8 call site object
-  error.callSite = frames;
+
+//
+// Set Error.prepareStackTrace thus allowing stack-chain
+// to take control of the Error().stack formating.
+//
+
+// If there already is a custom stack formater, then set
+// that as the stack-chain formater.
+if (Error.prepareStackTrace) {
+    chain.format.replace(Error.prepareStackTrace);
+}
+
+function prepareStackTrace(error, originalFrames) {
+  // Make a loss copy of originalFrames
+  var frames = originalFrames.concat();
 
   // extend frames
   frames = chain.extend._modify(error, frames);
@@ -83,30 +94,56 @@ Error.prepareStackTrace = function (error, frames) {
   // reduce frames to match Error.stackTraceLimit
   frames = frames.slice(0, Error.stackTraceLimit);
 
+  // Set the callSite property
+  // But only if it havn't been explicitly set, otherwise
+  // error.stack would have unintended side effects
+  if (Object.getOwnPropertyDescriptor(error, "callSite") === undefined) {
+    error.callSite = {
+      original: originalFrames,
+      mutated: frames
+    };
+  }
+
   // format frames
   return chain.format._formater(error, frames);
-};
+}
 
-// Manage call site storeage
-Object.defineProperty(Error.prototype, 'callSite', {
+// Replace the v8 stack trace creator
+Object.defineProperty(Error, 'prepareStackTrace', {
   'get': function () {
-    // return callSite if it already exist
-    if (this._callSite) {
-      return this._callSite;
-    }
-
-    // calculate call site object
-    this.stack;
-
-    // return call site object
-    return this._callSite;
+    return prepareStackTrace;
   },
 
-  'set': function (callSite) {
-    // set a hidden writable ._callSite property
-    Object.defineProperty(this, '_callSite', {
-      value: callSite,
-      configurable: true
+  'set': function (formater) {
+    // Error.prepareStackTrace was set, this means that someone is
+    // trying to take control of the Error().stack format. Make
+    // them belive they succeeded by setting them up as the stack-chain
+    // formater.
+    chain.format.replace(formater);
+  }
+});
+
+//
+// Manage call site storeage
+//
+function callSiteGetter() {
+  // calculate call site object
+  this.stack;
+
+  // return call site object
+  return this.callSite;
+}
+
+Object.defineProperty(Error.prototype, 'callSite', {
+  'get': callSiteGetter,
+
+  'set': function (frames) {
+    // In case callSite was set before [[getter]], just set
+    // the value
+    Object.defineProperty(this, 'callSite', {
+        value: frames,
+        writable: true,
+        configurable: true
     });
   },
 
