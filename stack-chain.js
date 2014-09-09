@@ -110,17 +110,7 @@ function prepareStackTrace(error, originalFrames) {
 
 // Replace the v8 stack trace creator
 Object.defineProperty(Error, 'prepareStackTrace', {
-  'get': function () {
-    return prepareStackTrace;
-  },
-
-  'set': function (formater) {
-    // Error.prepareStackTrace was set, this means that someone is
-    // trying to take control of the Error().stack format. Make
-    // them belive they succeeded by setting them up as the stack-chain
-    // formater.
-    chain.format.replace(formater);
-  }
+  'value': prepareStackTrace
 });
 
 //
