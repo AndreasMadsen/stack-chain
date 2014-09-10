@@ -10,6 +10,16 @@ function stackChain() {
   this.version = require('./package.json').version;
 }
 
+var SHORTCUT_CALLSITE = false;
+stackChain.prototype.callSite = function collectCallSites() {
+  SHORTCUT_CALLSITE = true;
+  var error = new Error();
+  Error.captureStackTrace(error, collectCallSites);
+  var callSites = error.stack;
+  SHORTCUT_CALLSITE = false;
+  return callSites;
+};
+
 var chain = new stackChain();
 
 // If a another copy (same version or not) of stack-chain exists it will result
@@ -100,6 +110,8 @@ if (Error.prepareStackTrace) {
 }
 
 function prepareStackTrace(error, originalFrames) {
+  if (SHORTCUT_CALLSITE) return originalFrames;
+
   // Make a loss copy of originalFrames
   var frames = originalFrames.concat();
 
