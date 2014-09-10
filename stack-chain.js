@@ -59,14 +59,32 @@ TraceModifier.prototype.deattach = function (modifier) {
 
 function StackFormater() {
   this._formater = defaultFormater;
+  this._previous = undefined;
 }
 
 StackFormater.prototype.replace = function (formater) {
-  this._formater = formater;
+  if (formater) {
+    this._formater = formater;
+  } else {
+    this.restore();
+  }
 };
 
 StackFormater.prototype.restore  = function () {
   this._formater = defaultFormater;
+};
+
+StackFormater.prototype._backup = function () {
+  if (this._formater === defaultFormater) {
+    this._previous = undefined;
+  } else {
+    this._previous = this._formater;
+  }
+};
+
+StackFormater.prototype._roolback = function () {
+  this.replace(this._previous);
+  this._previous = undefined;
 };
 
 
@@ -115,11 +133,23 @@ Object.defineProperty(Error, 'prepareStackTrace', {
   },
 
   'set': function (formater) {
+    // If formater is prepareStackTrace it means that someone ran
+    // var old = Error.prepareStackTrace;
+    // Error.prepareStackTrace = custom
+    // new Error().stack
+    // Error.prepareStackTrace = old;
+    // The effect of this, should be that the old behaviour is restored.
+    if (formater === prepareStackTrace) {
+      chain.format._roolback();
+    }
     // Error.prepareStackTrace was set, this means that someone is
     // trying to take control of the Error().stack format. Make
     // them belive they succeeded by setting them up as the stack-chain
     // formater.
-    chain.format.replace(formater);
+    else {
+      chain.format._backup();
+      chain.format.replace(formater);
+    }
   }
 });
 
