@@ -94,6 +94,12 @@ Will restore the default v8 `formater`. Note that dude to the nature of v8
 `Error` objects, if one of the getters `Error.stack` or `Error.callSite` has
 already executed, the value of `Error.stack` won't change.
 
+### chain.callSite()
+
+This will return the unmodified callSite array from the current tick. This
+is a performance shortcut, as it does not require generating the `.stack`
+string. This behaviour is different from the `Error().callSite` properties.
+
 ### Error.stackTraceLimit
 
 This limites the size of the `callSites` array. The default value is 10, and
