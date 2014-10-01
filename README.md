@@ -114,7 +114,7 @@ Returns the original `callSite` array.
 ### Error().callSite.mutated
 
 Returns the mutated `callSite` array, that is after `extend` and `filter`
-is applied. The array will also mot excite the `Error.stackTraceLimit`.
+is applied. The array will not excite the `Error.stackTraceLimit`.
 
 ## License
 
