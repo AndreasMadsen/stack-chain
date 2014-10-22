@@ -11,12 +11,24 @@ function stackChain() {
 }
 
 var SHORTCUT_CALLSITE = false;
-stackChain.prototype.callSite = function collectCallSites() {
+stackChain.prototype.callSite = function collectCallSites(options) {
+  if (!options) options = {};
+
+  // Get CallSites
   SHORTCUT_CALLSITE = true;
   var error = new Error();
   Error.captureStackTrace(error, collectCallSites);
   var callSites = error.stack;
   SHORTCUT_CALLSITE = false;
+
+  // Slice
+  callSites = callSites.slice(options.slice || 0);
+
+  // Modify CallSites
+  if (options.extend) callSites = this.extend._modify(error, callSites);
+  if (options.filter) callSites = this.filter._modify(error, callSites);
+
+  // Done
   return callSites;
 };
 

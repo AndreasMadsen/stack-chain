@@ -1,18 +1,18 @@
 
 // Produces an error with `level` deept in the call stack
-function deepStack(curr, top, callback) {
+exports.deepStack = function deepStack(curr, top, callback) {
   if (curr === top) {
     callback();
   } else {
     deepStack(curr + 1, top, callback);
   }
-}
+};
 
 exports.real = function produceError(level) {
   var stack;
   var limit = Error.stackTraceLimit;
 
-  deepStack(0, level, function () {
+  exports.deepStack(0, level, function () {
     Error.stackTraceLimit = level;
 
     var error = new Error('trace');
@@ -33,4 +33,12 @@ exports.fake = function(input) {
   }
 
   return output.join('\n');
+};
+
+exports.convert = function (callSites) {
+  var lines = [];
+  for (var i = 0; i < callSites.length; i++) {
+    lines.push("    at " + callSites[i].toString());
+  }
+  return lines.join('\n');
 };

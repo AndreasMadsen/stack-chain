@@ -94,11 +94,29 @@ Will restore the default v8 `formater`. Note that dude to the nature of v8
 `Error` objects, if one of the getters `Error.stack` or `Error.callSite` has
 already executed, the value of `Error.stack` won't change.
 
-### chain.callSite()
+### chain.callSite([options])
 
-This will return the unmodified callSite array from the current tick. This
+This will return the unmodified `callSite` array from the current tick. This
 is a performance shortcut, as it does not require generating the `.stack`
 string. This behaviour is different from the `Error().callSite` properties.
+
+While this is mostly generating `callSite` in hot code, it can be useful to
+do some modification on the array. The `options` object, supports the following:
+
+```javascript
+options = {
+  // (default false) run the extenders on the callSite array.
+  extend: true,
+
+  // (default false) run the filters on the callSite array.
+  filter: true,
+
+  // (default 0) before running extend or filter methods, slice of some of the
+  // end. This can be useful for hiding the place from where you called this
+  // function.
+  slice: 2
+}
+```
 
 ### Error.stackTraceLimit
 
