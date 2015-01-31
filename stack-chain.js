@@ -16,17 +16,17 @@ stackChain.prototype.callSite = function collectCallSites(options) {
 
   // Get CallSites
   SHORTCUT_CALLSITE = true;
-  var error = new Error();
-  Error.captureStackTrace(error, collectCallSites);
-  var callSites = error.stack;
+  var obj = {};
+  Error.captureStackTrace(obj, collectCallSites);
+  var callSites = obj.stack;
   SHORTCUT_CALLSITE = false;
 
   // Slice
   callSites = callSites.slice(options.slice || 0);
 
   // Modify CallSites
-  if (options.extend) callSites = this.extend._modify(error, callSites);
-  if (options.filter) callSites = this.filter._modify(error, callSites);
+  if (options.extend) callSites = this.extend._modify(obj, callSites);
+  if (options.filter) callSites = this.filter._modify(obj, callSites);
 
   // Done
   return callSites;
