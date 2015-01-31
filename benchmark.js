@@ -48,7 +48,7 @@ function timeit(top, doit) {
     'method': function () {
         var top = 100000;
         var stat = timeit(top, function () {
-            return chain.callSites();
+            return chain.callSite();
         });
         process.send({ "mean": stat.mean(), "sd": stat.sd() });
     }
