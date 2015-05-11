@@ -39,9 +39,7 @@ var chain = new stackChain();
 if (global._stackChain) {
   // In case the version match, we can simply return the first initialized copy
   if (global._stackChain.version === chain.version) {
-    console.error('Another copy of stack-chain was found, using the first initialized copy');
     module.exports = global._stackChain;
-
     return; // Prevents V8 and Error extentions from being set again
   }
   // The version don't match, this is really bad. Lets just throw
