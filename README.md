@@ -16,8 +16,8 @@ var chain = require('stack-chain');
 When the `Error.stack` getter is executed, the `stack-chain` will perform the
 following:
 
-1. execute the `modifiers` attach by `chain.extend`.
-2. execute the `modifiers` attach by `chain.filter`.
+1. execute the `modifiers` attached by `chain.extend`.
+2. execute the `modifiers` attached by `chain.filter`.
 3. execute the `formater` set by `chain.format.replace`.
 
 ### chain.extend.attach(modifier)
