@@ -39,7 +39,7 @@ chain.filter.attach(function (error, frames) {
 
     // Filter out traces related to this file
     var rewrite = frames.filter(function (callSite) {
-      return (callSite[i].getFileName()[0] !== module.filename);
+      return callSite.getFileName() !== module.filename;
     });
 
     return rewrite;
