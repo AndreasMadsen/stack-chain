@@ -1,6 +1,6 @@
 
 var test = require("tap").test;
-var chain = require('../../stack-chain.js');
+var chain = require('../..');
 var produce = require('../produce.js');
 
 test("modifier execution order", function (t) {
