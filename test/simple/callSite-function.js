@@ -1,6 +1,6 @@
 
 var test = require("tap").test;
-var chain = require('../..');
+var chain = require('../../');
 var produce = require('../produce.js');
 
 Error.stackTraceLimit = Infinity;

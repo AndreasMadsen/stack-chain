@@ -19,7 +19,7 @@ Error.prepareStackTrace = function (error, frames) {
   return defaultFormater(error, frames);
 };
 
-var chain = require('../..');
+var chain = require('../../');
 
 test("set Error.prepareStackTrace before require", function (t) {
   t.test("default formatter replaced", function (t) {

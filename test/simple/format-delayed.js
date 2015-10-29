@@ -3,7 +3,7 @@ var test = require("tap").test;
 var defaultFormater = require('../../format.js');
 var produce = require('../produce.js');
 
-var chain = require('../..');
+var chain = require('../../');
 
 // Set a formater after stack-chain is required
 function prepareStackTrace(error, frames) {
