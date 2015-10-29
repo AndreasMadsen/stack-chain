@@ -34,24 +34,6 @@ stackChain.prototype.callSite = function collectCallSites(options) {
 
 var chain = new stackChain();
 
-// If a another copy (same version or not) of stack-chain exists it will result
-// in wrong stack traces (most likely dublicate callSites).
-if (global._stackChain) {
-  // In case the version match, we can simply return the first initialized copy
-  if (global._stackChain.version === chain.version) {
-    module.exports = global._stackChain;
-    return; // Prevents V8 and Error extentions from being set again
-  }
-  // The version don't match, this is really bad. Lets just throw
-  else {
-    throw new Error('Conflicting version of stack-chain found');
-  }
-}
-// Yay, no other stack-chain copy exists, yet :/
-else {
-  module.exports = global._stackChain = chain;
-}
-
 function TraceModifier() {
   this._modifiers = [];
 }
@@ -201,3 +183,5 @@ Object.defineProperty(Error.prototype, 'callSite', {
 
   configurable: true
 });
+
+module.exports = chain;

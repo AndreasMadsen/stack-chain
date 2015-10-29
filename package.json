@@ -3,11 +3,10 @@
   "description": "API for combining call site modifiers",
   "version": "1.3.3",
   "author": "Andreas Madsen <amwebdk@gmail.com>",
-  "main": "./stack-chain.js",
   "scripts": {
     "test": "tap ./test/simple"
   },
-  "repository" : {
+  "repository": {
     "type": "git",
     "url": "git://github.com/AndreasMadsen/stack-chain.git"
   },
@@ -20,7 +19,8 @@
     "format"
   ],
   "devDependencies": {
-    "tap": "0.4.x"
+    "tap": "0.4.x",
+    "uglify-js": "^2.5.0"
   },
   "license": "MIT"
 }

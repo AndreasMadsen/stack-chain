@@ -1,6 +1,6 @@
 
 var test = require("tap").test;
-var chain = require('../../stack-chain.js');
+var chain = require('../..');
 var defaultFormater = require('../../format.js');
 var produce = require('../produce.js');
 
