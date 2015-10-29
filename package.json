@@ -19,8 +19,8 @@
     "format"
   ],
   "devDependencies": {
-    "tap": "0.4.x",
-    "uglify-js": "^2.5.0"
+    "tap": "2.x.x",
+    "uglify-js": "2.5.x"
   },
   "license": "MIT"
 }
