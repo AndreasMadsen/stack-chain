@@ -117,9 +117,11 @@ function prepareStackTrace(error, originalFrames) {
   frames = frames.slice(0, Error.stackTraceLimit);
 
   // Set the callSite property
-  // But only if it havn't been explicitly set, otherwise
-  // error.stack would have unintended side effects
-  if (Object.getOwnPropertyDescriptor(error, "callSite") === undefined) {
+  // But only if it hasn't been explicitly set, otherwise
+  // error.stack would have unintended side effects. Check also for
+  // non-extensible/sealed objects, such as those from Google's Closure Library
+  if (Object.isExtensible(error) &&
+      (Object.getOwnPropertyDescriptor(error, "callSite") === undefined)) {
     error.callSite = {
       original: originalFrames,
       mutated: frames
