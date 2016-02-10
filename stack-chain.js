@@ -10,16 +10,17 @@ function stackChain() {
   this.version = require('./package.json').version;
 }
 
-var SHORTCUT_CALLSITE = false;
+
+var SHORTCIRCUIT_CALLSITE = false;
 stackChain.prototype.callSite = function collectCallSites(options) {
   if (!options) options = {};
 
   // Get CallSites
-  SHORTCUT_CALLSITE = true;
+  SHORTCIRCUIT_CALLSITE = true;
   var obj = {};
   Error.captureStackTrace(obj, collectCallSites);
   var callSites = obj.stack;
-  SHORTCUT_CALLSITE = false;
+  SHORTCIRCUIT_CALLSITE = false;
 
   // Slice
   callSites = callSites.slice(options.slice || 0);
@@ -74,18 +75,20 @@ StackFormater.prototype.replace = function (formater) {
 
 StackFormater.prototype.restore  = function () {
   this._formater = defaultFormater;
+  this._previous = undefined;
 };
 
 StackFormater.prototype._backup = function () {
-  if (this._formater === defaultFormater) {
-    this._previous = undefined;
-  } else {
-    this._previous = this._formater;
-  }
+  this._previous = this._formater;
 };
 
 StackFormater.prototype._roolback = function () {
-  this.replace(this._previous);
+  if (this._previous === defaultFormater) {
+    this.replace(undefined);
+  } else {
+    this.replace(this._previous);
+  }
+
   this._previous = undefined;
 };
 
@@ -101,8 +104,10 @@ if (Error.prepareStackTrace) {
     chain.format.replace(Error.prepareStackTrace);
 }
 
+var SHORTCIRCUIT_FORMATER = false;
 function prepareStackTrace(error, originalFrames) {
-  if (SHORTCUT_CALLSITE) return originalFrames;
+  if (SHORTCIRCUIT_CALLSITE) return originalFrames;
+  if (SHORTCIRCUIT_FORMATER) return defaultFormater(error, originalFrames);
 
   // Make a loss copy of originalFrames
   var frames = originalFrames.concat();
@@ -129,7 +134,11 @@ function prepareStackTrace(error, originalFrames) {
   }
 
   // format frames
-  return chain.format._formater(error, frames);
+  SHORTCIRCUIT_FORMATER = true;
+  var format = chain.format._formater(error, frames);
+  SHORTCIRCUIT_FORMATER = false;
+
+  return format;
 }
 
 // Replace the v8 stack trace creator
