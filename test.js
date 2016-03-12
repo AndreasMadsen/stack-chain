@@ -7,4 +7,4 @@ Object.setPrototypeOf(an, {});
 
 var self = Object.create(an);
 Error.captureStackTrace(self);
-self.stack;
+console.log(self.stack);
