@@ -1,26 +1,21 @@
 'use strict';
 require('stack-chain');
 
-var expect = {
-  actual: Promise.reject({}),
-  object: function () {
-    this.stack
+var reject = {
+  objectWrap: function cut() {
+    var self = Object.create(this);
+    Error.captureStackTrace(self, cut);
+    return Promise.reject({}).catch(function () {
+      self.stack;
+    });
   }
 };
 
-var reject = Object.create(expect)
-var objectFn = reject.object;
-reject.object = function cut() {
-  var self = Object.create(this)
-  Error.captureStackTrace(self, cut)
-  return this.actual.catch(objectFn.bind(self))
-};
-
-var an = reject.object.bind(reject)
-an.toString = reject.object.toString
+var an = reject.objectWrap.bind(reject)
+an.toString = reject.objectWrap.toString
 Object.setPrototypeOf(an, reject)
 
-var object = an.object();
+var object = an.objectWrap();
 
 object.catch(function (error) {
   console.error(error.stack)
