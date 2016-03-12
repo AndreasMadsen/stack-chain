@@ -25,9 +25,21 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+function FormatErrorString(error) {
+  try {
+    return Error.prototype.toString.call(error);
+  } catch (e) {
+    try {
+      return "<error: " + e + ">";
+    } catch (ee) {
+      return "<error>";
+    }
+  }
+}
+
 module.exports = function FormatStackTrace(error, frames) {
   var lines = [];
-  lines.push(error.toString());
+  lines.push(FormatErrorString(error));
   for (var i = 0; i < frames.length; i++) {
     var frame = frames[i];
     var line;
