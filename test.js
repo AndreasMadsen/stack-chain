@@ -1,26 +1,4 @@
-
-//
-// Thenable
-//
-function Thenable(must) {
-  must = Object.create(must)
-
-  for (var name in must) {
-    if (typeof must[name] == "function") {
-      must[name] = promisify(must[name])
-    }
-  }
-
-  return must
-}
-
-function promisify(fn) {
-  return function cut() {
-    var self = Object.create(this)
-    Error.captureStackTrace(self, cut)
-    return this.actual.catch(fn.bind(self))
-  }
-}
+'use strict';
 
 //
 // Must
@@ -30,8 +8,8 @@ function Must(actual) {
 }
 
 Object.defineProperty(Must.prototype, "an", { get: function() {
-  var assert = this.instanceof.bind(this)
-  assert.toString = this.instanceof.toString
+  var assert = this.object.bind(this)
+  assert.toString = this.object.toString
   Object.setPrototypeOf(assert, this)
   return assert
 }});
@@ -40,12 +18,17 @@ Must.prototype.object = function() {
   this.stack;
 }
 
-Must.prototype.instanceof = function(expected) {
-  this.stack;
-}
-
 Must.prototype.reject = function () {
-  return Thenable(this);
+  var must = Object.create(this)
+  var objectFn = must.object;
+
+  must.object = function cut() {
+    var self = Object.create(this)
+    Error.captureStackTrace(self, cut)
+    return this.actual.catch(objectFn.bind(self))
+  }
+
+  return must
 }
 
 //
