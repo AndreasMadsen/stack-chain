@@ -1,42 +1,27 @@
 'use strict';
-
-//
-// Must
-//
-function Must(actual) {
-  this.actual = actual
-}
-
-Object.defineProperty(Must.prototype, "an", { get: function() {
-  var assert = this.object.bind(this)
-  assert.toString = this.object.toString
-  Object.setPrototypeOf(assert, this)
-  return assert
-}});
-
-Must.prototype.object = function() {
-  this.stack;
-}
-
-Must.prototype.reject = function () {
-  var must = Object.create(this)
-  var objectFn = must.object;
-
-  must.object = function cut() {
-    var self = Object.create(this)
-    Error.captureStackTrace(self, cut)
-    return this.actual.catch(objectFn.bind(self))
-  }
-
-  return must
-}
-
-//
-// Test
-//
 require('stack-chain');
-new Must(
-  Promise.reject({})
-).reject().an.object().catch(function (error) {
+
+var expect = {
+  actual: Promise.reject({}),
+  object: function () {
+    this.stack
+  }
+};
+
+var reject = Object.create(expect)
+var objectFn = reject.object;
+reject.object = function cut() {
+  var self = Object.create(this)
+  Error.captureStackTrace(self, cut)
+  return this.actual.catch(objectFn.bind(self))
+};
+
+var an = reject.object.bind(reject)
+an.toString = reject.object.toString
+Object.setPrototypeOf(an, reject)
+
+var object = an.object();
+
+object.catch(function (error) {
   console.error(error.stack)
-})
+});
