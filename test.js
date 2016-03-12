@@ -1,22 +1,10 @@
 'use strict';
 require('stack-chain');
 
-var reject = {
-  objectWrap: function cut() {
-    var self = Object.create(this);
-    Error.captureStackTrace(self, cut);
-    return Promise.reject({}).catch(function () {
-      self.stack;
-    });
-  }
-};
+var an = function () {}
+an.toString = an.toString // originally not an, but still a cause of failure
+Object.setPrototypeOf(an, {});
 
-var an = reject.objectWrap.bind(reject)
-an.toString = reject.objectWrap.toString
-Object.setPrototypeOf(an, reject)
-
-var object = an.objectWrap();
-
-object.catch(function (error) {
-  console.error(error.stack)
-});
+var self = Object.create(an);
+Error.captureStackTrace(self);
+self.stack;
