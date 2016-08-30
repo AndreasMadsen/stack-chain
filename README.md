@@ -29,7 +29,7 @@ The `modifier` is a function there takes two arguments `error` and `frames`.
 
 * `error` is the `Error` object.
 * `frames` is an array of `callSite` objects, see
-  [v8 documentation](http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi)
+  [v8 documentation](https://github.com/v8/v8/wiki/Stack-Trace-API)
   for details.
 
 When the `modifier` is done, it should `return` a modified `frames` array.
@@ -68,7 +68,7 @@ Replaces the default v8 `formater`. The new `formater` takes a two arguments
 
 * `error` is the `Error` object.
 * `callSites` is an array of `callSite` objects, see
-  [v8 documentation](http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi)
+  [v8 documentation](https://github.com/v8/v8/wiki/Stack-Trace-API)
   for details.
 
 When the `formater` is done, it should `return` a `string`. The `string` will
@@ -122,7 +122,7 @@ options = {
 
 This limites the size of the `callSites` array. The default value is 10, and
 can be set to any positive number including `Infinity`. See
-[v8 documentation](http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi)
+[v8 documentation](https://github.com/v8/v8/wiki/Stack-Trace-API)
 for details.
 
 ### Error().callSite.original
