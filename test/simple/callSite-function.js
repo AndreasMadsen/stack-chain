@@ -31,7 +31,7 @@ test("stack extend part", function (t) {
 
   t.test("callSite method matches simple case property length", function (t) {
     var method = chain.callSite();
-    var propery = (new Error()).callSite.original;
+    var propery = chain.originalCallSite(new Error());
     t.strictEqual(method.length, propery.length);
 
     // The other stuff still works

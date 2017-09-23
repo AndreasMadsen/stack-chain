@@ -118,21 +118,21 @@ options = {
 }
 ```
 
+### chain.originalCallSite(error)
+
+Returns the original `callSite` array.
+
+### chain.mutatedCallSite(error)
+
+Returns the mutated `callSite` array, that is after `extend` and `filter`
+is applied. The array will not exceed the `Error.stackTraceLimit`.
+
 ### Error.stackTraceLimit
 
 This limites the size of the `callSites` array. The default value is 10, and
 can be set to any positive number including `Infinity`. See
 [v8 documentation](https://github.com/v8/v8/wiki/Stack-Trace-API)
 for details.
-
-### Error().callSite.original
-
-Returns the original `callSite` array.
-
-### Error().callSite.mutated
-
-Returns the mutated `callSite` array, that is after `extend` and `filter`
-is applied. The array will not excite the `Error.stackTraceLimit`.
 
 ## License
 

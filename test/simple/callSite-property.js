@@ -20,8 +20,8 @@ test("stack extend part", function (t) {
     var error = new Error();
         error.test = error;
 
-    var original = error.callSite.original.length;
-    var mutated = error.callSite.mutated.length;
+    var original = chain.originalCallSite(error).length;
+    var mutated = chain.mutatedCallSite(error).length;
     t.strictEqual(mutated, original);
 
     t.end();
@@ -35,24 +35,11 @@ test("stack extend part", function (t) {
 
     chain.extend.attach(wonderLand);
 
-    var original = error.callSite.original.length;
-    var mutated = error.callSite.mutated.length;
+    var original = chain.originalCallSite(error).length;
+    var mutated = chain.mutatedCallSite(error).length;
     t.strictEqual(mutated, original + 1);
 
     chain.extend.deattach(wonderLand);
-
-    t.end();
-  });
-
-  t.test("setting callSite", function (t) {
-    var error = new Error();
-        error.test = error;
-        error.correct = true;
-
-    error.callSite = "custom";
-    t.strictEqual(error.callSite, "custom");
-    error.stack;
-    t.strictEqual(error.callSite, "custom");
 
     t.end();
   });

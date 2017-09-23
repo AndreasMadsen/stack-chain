@@ -1,6 +1,8 @@
 
 // use a already existing formater or fallback to the default v8 formater
 var defaultFormater = require('./format.js');
+var originalCallSiteSymbol = Symbol('originalCallSite');
+var mutatedCallSiteSymbol = Symbol('mutatedCallSite');
 
 // public define API
 function stackChain() {
@@ -31,6 +33,16 @@ stackChain.prototype.callSite = function collectCallSites(options) {
 
   // Done
   return callSites;
+};
+
+stackChain.prototype.originalCallSite = function (error) {
+  error.stack;
+  return error[originalCallSiteSymbol];
+};
+
+stackChain.prototype.mutatedCallSite = function (error) {
+  error.stack;
+  return error[mutatedCallSiteSymbol];
 };
 
 var chain = new stackChain();
@@ -125,12 +137,9 @@ function prepareStackTrace(error, originalFrames) {
   // But only if it hasn't been explicitly set, otherwise
   // error.stack would have unintended side effects. Check also for
   // non-extensible/sealed objects, such as those from Google's Closure Library
-  if (Object.isExtensible(error) &&
-      (Object.getOwnPropertyDescriptor(error, "callSite") === undefined)) {
-    error.callSite = {
-      original: originalFrames,
-      mutated: frames
-    };
+  if (Object.isExtensible(error)) {
+    error[originalCallSiteSymbol] = originalFrames;
+    error[mutatedCallSiteSymbol] = frames;
   }
 
   // format frames
@@ -166,33 +175,6 @@ Object.defineProperty(Error, 'prepareStackTrace', {
       chain.format.replace(formater);
     }
   }
-});
-
-//
-// Manage call site storeage
-//
-function callSiteGetter() {
-  // calculate call site object
-  this.stack;
-
-  // return call site object
-  return this.callSite;
-}
-
-Object.defineProperty(Error.prototype, 'callSite', {
-  'get': callSiteGetter,
-
-  'set': function (frames) {
-    // In case callSite was set before [[getter]], just set
-    // the value
-    Object.defineProperty(this, 'callSite', {
-        value: frames,
-        writable: true,
-        configurable: true
-    });
-  },
-
-  configurable: true
 });
 
 module.exports = chain;
