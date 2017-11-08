@@ -1,6 +1,6 @@
 # stack-chain [![Build Status](https://secure.travis-ci.org/AndreasMadsen/stack-chain.png)](http://travis-ci.org/AndreasMadsen/stack-chain)
 
-> API for combining call site modifyers
+> API for combining call site modifiers
 
 ## Installation
 
