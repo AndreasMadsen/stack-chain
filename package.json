@@ -20,7 +20,7 @@
   ],
   "devDependencies": {
     "tap": "2.x.x",
-    "uglify-js": "2.5.x"
+    "uglify-js": "3.6.x"
   },
   "license": "MIT"
 }
